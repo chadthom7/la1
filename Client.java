@@ -50,7 +50,7 @@ public Client(String address, int port)
 			out.writeUTF(o_line);
 			//Data from server
 			i_line = in.readUTF();
-			System.out.println("Got input from Server...");
+			System.out.println("Got input from Server ...");
 			System.out.println("Printing input: "+ i_line);
 
 		} catch(Exception i) { 
