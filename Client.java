@@ -8,7 +8,8 @@ public class Client
 /* initialize socket and input output streams */
 private Socket socket = null; 
 private BufferedReader input = null; 
-private DataOutputStream out = null; 
+private DataOutputStream out = null;
+private DataInputStream in = null;
 
 /* constructor to put ip address and port */
 public Client(String address, int port) 
@@ -20,27 +21,36 @@ public Client(String address, int port)
 		System.out.println("Error in IP or port");
 		System.exit(0);
     	}
-	System.out.println("Connected"); 
-
+	System.out.println("Connected"); // Connected
 	try { 
 		/* takes input from terminal */
 		input = new BufferedReader(new InputStreamReader(System.in)); 
 
 		/* sends output to the socket */
 		out = new DataOutputStream(socket.getOutputStream()); 
-
+		
+		// Data from Server
+		in = new DataInputStream(
+			new BufferedInputStream(socket.getInputStream()));
+		
+	
 	} catch(IOException i) { 
 		System.out.println(i); 
 	} 
 	
 	/* string to read message from input */
-	String line = ""; 
-	
+	String o_line = ""; 
+	String i_line = "";
+
 	/* keep reading until "Over" is input */
-	while (!line.equals("Over")) { 
+	while (!o_line.equals("Over")) { 
 		try { 
-			line = input.readLine(); 
-			out.writeUTF(line);
+			// Data to send to server
+			o_line = input.readLine(); 
+			out.writeUTF(o_line);
+			//Data from server
+			i_line = in.readUTF();
+			System.out.println(i_line);
 		} catch(Exception i) { 
 			System.out.println(i); 
 		} 
@@ -50,7 +60,8 @@ public Client(String address, int port)
 	try { 
 		input.close(); 
 		out.close(); 
-		socket.close(); 
+		socket.close();
+	       	in.close();	
 	} catch(Exception i) {
 		System.out.println(i);  
 	} 
